@@ -91,20 +91,21 @@ vector<int> inverter_com_copia(const vector<int>& v){
     cout << endl;
     return vetNovo;
 }
-/*
+
 void inverter_inplace(vector<int> v){
-     int aux = 0;
-     for(int i = v.size()-1;i>=v.size()/2;i--){
-        v[aux] = v[i];
-        aux+=1;
-     }
+    int j = 0,aux = 0;
+    for(int i = 0; i<(v.size()) / 2;i++){
+        j = v.size()-i-1;
+        aux = v[i];
+        v[i] = v[j];
+        v[j] = aux;
+    }
      cout << "Vetor invertido sem vetor auxiliar: ";
     for(int i = 0; i<v.size();i++){
         cout << v[i] << " ,";
     }
     cout << endl;
 }
-*/
 
 int sortear(const vector<int>& v){
     int size = v.size() - 1;
@@ -112,65 +113,112 @@ int sortear(const vector<int>& v){
     return v[rand() % size];
 }
 
-/*
+void embaralhar(vector<int> v){
+    for(int i =0; i< v.size(); i++){
+        int randomize = (rand() % v.size());
+    
+         int aux = v[i];
+         v[i] = v[randomize];
+        v[randomize] = aux;
+     }
+
+    cout << "Vetor embaralhado: "; 
+    for(int i =0; i<v.size();i++){
+        cout << v[i] << ",";
+    }
+    cout << endl;
+
+}
+
+
 void ordenar(vector<int> v){
-    int indice_menor = 0;
+    int menor = 0,aux = 0;
+    vector<int> vetOrdenado;
     for (int i = 0; i < v.size(); i++){
-
-        
-            if(v[i] < v[indice_menor]){
-                indice_menor = i;
+        menor = i;
+        for(int j = i+1; j<v.size();j++){
+            if(v[menor]>v[j]){
+                menor = j;
             }
-            int aux = v[i];
-            v[i]= v[indice_menor];
-            v[indice_menor] = aux;
         }
-        
-    cout << "Ordenado: ";
-    for(int i = 0; i<v.size();i++){
-        cout << v[i] << " ,";
-    }
-    cout << endl;
-}
-*/
-vector<int> exclusivos(const vector<int>& v){
-    vector<int> vetNovo;
-    vetNovo.push_back(v[0]);
-    for(int i = 0; i<v.size();i++){
-        for(int j = 0;j<v.size();j++){
-            if(vetNovo[i] != v[j]){
-            vetNovo[i] = v[j];
-            }
-        
+        if(i != menor){
+            aux = v[i];
+            v[i] = v[menor];
+            v[menor] = aux;
         }
     }
-    
-
-    cout << "Exclusivos: " ;
-    for(int i = 0; i<v.size();i++){
-        cout << vetNovo[i];
+    cout << "Vetor ordenado: ";
+    for(int i = 0; i<v.size()-1;i++){
+        cout << v[i] << ",";
     }
-    
     cout << endl;
-    return v;
+    
 }
-/*
+
+vector<int> exclusivos_abandonados(vector<int> v){
+
+    vector<int> exclusivos;
+    vector<int> abandonados;
+    int count = 0;
+    exclusivos.push_back(v[0]);
+    for(int i = 1; i<v.size();i++){
+        int aux = v[i];
+       for(int j = 0; j<exclusivos.size();j++){
+           if(aux != exclusivos[j]){
+               count ++;
+           }
+       }
+       if(count == exclusivos.size()){
+           exclusivos.push_back(aux);
+           count = 0;
+       }else{
+           abandonados.push_back(aux);
+           count = 0;
+       }
+    } 
+    
+    cout << "Exclusivos: ";
+    for(int i =0; i<exclusivos.size();i++){
+        cout << exclusivos[i] << " ,";
+    }
+    cout << endl;
+
+    cout << "Abandonados: ";
+    for (int i = 0; i < abandonados.size(); i++){
+        cout << abandonados[i] << " ,";
+    }
+    cout << endl;
+    
+ }
+ 
+
+
+
+
 vector<int> diferentes(const vector<int>& v){
-    vector<int> n;
+       vector<int> diferentes;
     int count = 0;
     for(int i = 0; i<v.size();i++){
-        for(int j = v.size()-1; j>=0;j--){
-            if(v[i] == v[j]){
-                break;
-            }else{
-             count = 1;   
-            }
-        }
-        if(count = 1){
-            n[i] = v[i];
-        }
+        int aux = v[i];
+       for(int j = 0; j<v.size();j++){
+           if(aux != v[j]){
+               count ++;
+           }
+       }
+       if(count == v.size()-1){
+           diferentes.push_back(aux);
+           count = 0;
+       }else{
+           count = 0;
+       }
+    } 
+    
+    cout << "Diferentes: ";
+    for(int i =0; i<diferentes.size();i++){
+        cout << diferentes[i] << " ,";
     }
-}*/
+    cout << endl;
+}
 
 int main(){
     clonar({1,2,3,4});
@@ -185,11 +233,15 @@ int main(){
 
     inverter_com_copia({1,2,3,-5,-6,-7});
 
-    //inverter_inplace({1,2,3,-5,-6,-7});
+    inverter_inplace({1,2,3,-5,-6,-7});
 
     sortear({1,2,3,-5,-6,-7});
 
-   // ordenar({1,5,3,4,6,7,2});
+    embaralhar({1,5,3,4,6,7,2});
 
-    exclusivos({1,5,3,4,6,7,2});
+    ordenar({1,5,3,4,6,7,2});
+
+    exclusivos_abandonados({1,3,2,2,4});
+
+    diferentes({1,3,2,2,4});
 }
